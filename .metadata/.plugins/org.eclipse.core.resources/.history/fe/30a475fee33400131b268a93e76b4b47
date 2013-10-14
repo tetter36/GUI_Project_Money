@@ -14,7 +14,7 @@ import org.eclipse.swt.widgets.Combo;
 
 public class MainScreen {
 
-	protected Shell shlMainScreen;
+	protected Shell shell;
 	private Text textFromAmt;
 	private Text textToAmt;
 
@@ -72,16 +72,18 @@ public class MainScreen {
 		
 		Combo comboFrom = new Combo(composite_1, SWT.NONE);
 		comboFrom.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		comboFrom.setItem(0, "USD");
+		comboFrom.setItem(0, "EUR");
 		//comboFrom.setItems({"USD", "EUR", "JPY", "GPB", "CHF", "CNY", "KRW", "INR"});
-		
-		comboFrom.add("USD");
-		comboFrom.add("EUR");
-		comboFrom.add("JPY");
-		comboFrom.add("GPB");
-		comboFrom.add("CHF");
-		comboFrom.add("CNY");
-		comboFrom.add("KRW");
-		comboFrom.add("INR");
+		/*
+		comboFrom.setText("USD");
+		comboFrom.setText("EUR");
+		comboFrom.setText("JPY");
+		comboFrom.setText("GPB");
+		comboFrom.setText("CHF");
+		comboFrom.setText("CNY");
+		comboFrom.setText("KRW");
+		comboFrom.setText("INR");*/
 		
 		Label lblAmount = new Label(composite_1, SWT.NONE);
 		lblAmount.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
@@ -96,14 +98,14 @@ public class MainScreen {
 		
 		Combo comboTo = new Combo(composite_1, SWT.NONE);
 		comboTo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		comboTo.add("USD");
-		comboTo.add("EUR");
-		comboTo.add("JPY");
-		comboTo.add("GPB");
-		comboTo.add("CHF");
-		comboTo.add("CNY");
-		comboTo.add("KRW");
-		comboTo.add("INR");
+		comboTo.setText("USD");
+		comboTo.setText("EUR");
+		comboTo.setText("JPY");
+		comboTo.setText("GPB");
+		comboTo.setText("CHF");
+		comboTo.setText("CNY");
+		comboTo.setText("KRW");
+		comboTo.setText("INR");
 		
 		Label lblAmount_1 = new Label(composite_1, SWT.NONE);
 		lblAmount_1.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));

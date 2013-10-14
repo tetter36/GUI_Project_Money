@@ -14,7 +14,7 @@ import org.eclipse.swt.widgets.Combo;
 
 public class MainScreen {
 
-	protected Shell shlMainScreen;
+	protected Shell shell;
 	private Text textFromAmt;
 	private Text textToAmt;
 
