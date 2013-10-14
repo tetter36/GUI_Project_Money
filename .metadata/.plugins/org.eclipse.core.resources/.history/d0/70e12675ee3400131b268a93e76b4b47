@@ -12,11 +12,8 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.ModifyEvent;
-
 //download from web
-//parse from HTML (regular expressions) check string api for regular expression
-	//use a Pattern * = Pattern.complie type thing. and matcher. look for java
-	//regular expression groups.
+//parse from HTML (regular expressions)
 
 
 public class MainScreen {

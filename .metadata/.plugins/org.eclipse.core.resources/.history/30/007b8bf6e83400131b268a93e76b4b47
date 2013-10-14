@@ -10,13 +10,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Combo;
-import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.ModifyEvent;
-
-//download from web
-//parse from HTML (regular expressions) check string api for regular expression
-	//use a Pattern * = Pattern.complie type thing. and matcher. look for java
-	//regular expression groups.
 
 
 public class MainScreen {
@@ -95,10 +88,6 @@ public class MainScreen {
 		lblAmount.setText("Amount:");
 		
 		textFromAmt = new Text(composite_1, SWT.BORDER);
-		textFromAmt.addModifyListener(new ModifyListener() {
-			public void modifyText(ModifyEvent arg0) {
-			}
-		});
 		textFromAmt.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
 		Label lblTo = new Label(composite_1, SWT.NONE);
@@ -121,10 +110,6 @@ public class MainScreen {
 		lblAmount_1.setText("Amount:");
 		
 		textToAmt = new Text(composite_1, SWT.BORDER);
-		textToAmt.addModifyListener(new ModifyListener() {
-			public void modifyText(ModifyEvent arg0) {
-			}
-		});
 		textToAmt.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 
 	}
