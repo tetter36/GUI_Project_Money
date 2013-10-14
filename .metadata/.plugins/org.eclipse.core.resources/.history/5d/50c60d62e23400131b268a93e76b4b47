@@ -72,8 +72,7 @@ public class MainScreen {
 		
 		Combo comboFrom = new Combo(composite_1, SWT.NONE);
 		comboFrom.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		
-		//comboFrom.setItems({"USD", "EUR", "JPY", "GPB", "CHF", "CNY", "KRW", "INR"});
+		comboFrom.setItems({"USD", "EUR", "JPY", "GPB", "CHF", "CNY", "KRW", "INR"});
 		/*
 		comboFrom.setText("USD");
 		comboFrom.setText("EUR");
