@@ -14,7 +14,7 @@ import org.eclipse.swt.widgets.Combo;
 
 public class MainScreen {
 
-	protected Shell shell;
+	protected Shell shlMainScreen;
 	private Text textFromAmt;
 	private Text textToAmt;
 
@@ -59,8 +59,8 @@ public class MainScreen {
 		composite.setLayoutData(BorderLayout.SOUTH);
 		composite.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		Button btnRefresh = new Button(composite, SWT.NONE);
-		btnRefresh.setText("Refresh Rates");
+		Button btnConvert = new Button(composite, SWT.NONE);
+		btnConvert.setText("Convert");
 		
 		Composite composite_1 = new Composite(shell, SWT.NONE);
 		composite_1.setLayoutData(BorderLayout.CENTER);

@@ -60,7 +60,7 @@ public class MainScreen {
 		composite.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
 		Button btnRefresh = new Button(composite, SWT.NONE);
-		btnRefresh.setText("Refresh Rates");
+		btnRefresh.setText("Refresh");
 		
 		Composite composite_1 = new Composite(shell, SWT.NONE);
 		composite_1.setLayoutData(BorderLayout.CENTER);
