@@ -1,0 +1,355 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.regex.*;
+
+import org.eclipse.swt.widgets.Decorations;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
+
+import swing2swt.layout.BorderLayout;
+
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Button;
+
+import swing2swt.layout.FlowLayout;
+
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
+
+//download from web
+//parse from HTML (regular expressions) check string api for regular expression
+	//use a Pattern * = Pattern.complie type thing. and matcher. look for java
+	//regular expression groups.
+
+
+public class MainScreen {
+
+	protected Shell shell;
+	private Text textFromAmt;
+	private Text textToAmt;
+	boolean lock = true;
+	int i = 0;
+	//Float f[] = new Float[];
+	String text; //holds info from one text box to set in the other
+	StringBuilder contentBuilder = new StringBuilder();
+	String fullWebpage = contentBuilder.toString();
+	String chosenRateTo;
+	String chosenRateFrom;
+	float conversion;
+	String conversionString;
+	Float EURrate;
+	Float JPYrate;
+	Float GBPrate;
+	Float CHFrate;
+	Float CNYrate;
+	Float KRWrate;
+	Float INRrate;
+
+	/**
+	 * Launch the application.
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		try {
+			MainScreen window = new MainScreen();
+			window.getURL();
+			window.open();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Open the window.
+	 */
+	public void open() {
+		Display display = Display.getDefault();
+		createContents();
+		shell.open();
+		shell.layout();
+		while (!shell.isDisposed()) {
+			if (!display.readAndDispatch()) {
+				display.sleep();
+			}
+		}
+	}
+
+	/**
+	 * Create contents of the window.
+	 */
+	protected void createContents() {
+		shell = new Shell();
+		shell.setSize(450, 300);
+		shell.setText("SWT Application");
+		shell.setLayout(new BorderLayout(0, 0));
+		
+		
+		Composite composite = new Composite(shell, SWT.NONE);
+		composite.setLayoutData(BorderLayout.SOUTH);
+		composite.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		
+		Button btnRefresh = new Button(composite, SWT.NONE);
+		btnRefresh.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				getURL();
+			}
+		});
+		btnRefresh.setText("Refresh Rates");
+		
+		Composite composite_1 = new Composite(shell, SWT.NONE);
+		composite_1.setLayoutData(BorderLayout.CENTER);
+		composite_1.setLayout(new GridLayout(5, false));
+		
+		Label lblFrom = new Label(composite_1, SWT.NONE);
+		lblFrom.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblFrom.setText("From:");
+		
+		final Combo comboFrom = new Combo(composite_1, SWT.READ_ONLY);
+		comboFrom.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		//comboFrom.setItems({"USD", "EUR", "JPY", "GPB", "CHF", "CNY", "KRW", "INR"});
+		
+		comboFrom.add("USD");
+		comboFrom.add("EUR");
+		comboFrom.add("JPY");
+		comboFrom.add("GBP");
+		comboFrom.add("CHF");
+		comboFrom.add("CNY");
+		comboFrom.add("KRW");
+		comboFrom.add("INR");
+		
+		chosenRateFrom = comboFrom.getText();
+		new Label(composite_1, SWT.NONE);
+		
+		Label lblTo = new Label(composite_1, SWT.NONE);
+		lblTo.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblTo.setText("To:");
+		
+		final Combo comboTo = new Combo(composite_1, SWT.READ_ONLY);
+		comboTo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		comboTo.add("USD");
+		comboTo.add("EUR");
+		comboTo.add("JPY");
+		comboTo.add("GBP");
+		comboTo.add("CHF");
+		comboTo.add("CNY");
+		comboTo.add("KRW");
+		comboTo.add("INR");
+		
+		chosenRateTo = comboTo.getText();
+		new Label(composite_1, SWT.NONE);
+		new Label(composite_1, SWT.NONE);
+		
+		Label label = new Label(composite_1, SWT.NONE);
+		label.setText("<-->");
+		new Label(composite_1, SWT.NONE);
+		new Label(composite_1, SWT.NONE);
+		
+		Label lblAmount = new Label(composite_1, SWT.NONE);
+		lblAmount.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblAmount.setText("Amount:");
+		
+		textFromAmt = new Text(composite_1, SWT.BORDER);
+		textFromAmt.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				//text = textFromAmt.getText();
+				//textToAmt.setText(text);
+				chosenRateFrom = comboFrom.getText();
+				chosenRateTo = comboTo.getText();
+				System.out.println(chosenRateFrom);
+				System.out.println(chosenRateTo);
+				if(chosenRateFrom.equalsIgnoreCase("USD")){
+					if(chosenRateTo.equalsIgnoreCase("EUR")){
+						conversion = (1/EURrate) * Float.parseFloat(textToAmt.getText());
+						conversionString = Float.toString(conversion);
+						textFromAmt.setText(conversionString);
+					}
+					else if(chosenRateTo.equalsIgnoreCase("GBP")){
+						
+					}
+				}
+				else if(chosenRateFrom.equalsIgnoreCase("GBP")){
+					
+				}
+				else if(chosenRateFrom.equalsIgnoreCase("CHF")){
+					
+					
+				}
+				else if (chosenRateFrom.equalsIgnoreCase("CNY")){
+					
+				}
+				else if (chosenRateFrom.equalsIgnoreCase("KRW")){
+					
+				}
+				else{ //INR
+					
+				}
+			}
+		});
+		textFromAmt.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		new Label(composite_1, SWT.NONE);
+		
+		Label lblAmount_1 = new Label(composite_1, SWT.NONE);
+		lblAmount_1.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblAmount_1.setText("Amount:");
+		
+		textToAmt = new Text(composite_1, SWT.BORDER);
+		textToAmt.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				chosenRateTo = comboTo.getText();
+				//Conversion();
+				//text = textToAmt.getText();
+				//textFromAmt.setText(text);
+			}
+		});
+		textToAmt.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+
+	}//createContents method
+	
+	public void getURL(){
+		URL webpage = null;
+		try {
+			webpage = new URL("http://www.x-rates.com/table/?from=USD&amount=1.00");
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		URLConnection html = null;
+		try {
+			html = webpage.openConnection();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+        BufferedReader in = null;
+		try {
+			in = new BufferedReader(
+			                        new InputStreamReader(
+			                        html.getInputStream()));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+        try {
+        	String inputLine;
+			while ((inputLine = in.readLine())!=null){
+				//System.out.println(inputLine);
+				contentBuilder.append(inputLine);
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        getRates();
+     
+        try {
+			in.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+	}//getURL method
+	
+	public void getRates(){
+		fullWebpage = contentBuilder.toString();
+		Pattern eur = Pattern.compile("from=EUR&amp;to=USD'>\\d*\\.\\d*<");
+		Matcher m = eur.matcher(fullWebpage);
+		while (m.find()){
+			Pattern rate = Pattern.compile("\\d*\\.\\d*");//pulls out the rate for specified pattern
+			Matcher m2 = rate.matcher(m.group());
+			while (m2.find()){
+					EURrate = Float.parseFloat(m2.group());
+					System.out.println(EURrate);
+			}//second while
+		}//first while
+		
+		//This gets the rate for the Great Britain Pound
+		Pattern gbp = Pattern.compile("from=GBP&amp;to=USD'>\\d*\\.\\d*<");
+		m = gbp.matcher(fullWebpage);
+		while (m.find()){
+			Pattern rate = Pattern.compile("\\d*\\.\\d*");//pulls out the rate for specified pattern
+			Matcher m2 = rate.matcher(m.group());
+			while (m2.find()){
+					GBPrate = Float.parseFloat(m2.group());
+			}//second while
+		}//first while
+		
+		//This gets the rate for the Japanese Yen (JPY)
+		Pattern jpy = Pattern.compile("from=JPY&amp;to=USD'>\\d*\\.\\d*<");
+		m = jpy.matcher(fullWebpage);
+		while (m.find()){
+			Pattern rate = Pattern.compile("\\d*\\.\\d*");//pulls out the rate for specified pattern
+			Matcher m2 = rate.matcher(m.group());
+			while (m2.find()){
+					JPYrate = Float.parseFloat(m2.group());
+			}//second while
+		}//first while
+		
+		//Gets rate for the Swiss Franc (CHF)
+		Pattern chf = Pattern.compile("from=CHF&amp;to=USD'>\\d*\\.\\d*<");
+		m = chf.matcher(fullWebpage);
+		while (m.find()){
+			Pattern rate = Pattern.compile("\\d*\\.\\d*");//pulls out the rate for specified pattern
+			Matcher m2 = rate.matcher(m.group());
+			while (m2.find()){
+					CHFrate = Float.parseFloat(m2.group());
+			}//second while
+		}//first while
+		
+		//Gets rate for the Chinese Yuan (CNY)
+		Pattern cny = Pattern.compile("from=CNY&amp;to=USD'>\\d*\\.\\d*<");
+		m = cny.matcher(fullWebpage);
+		while (m.find()){
+			Pattern rate = Pattern.compile("\\d*\\.\\d*");//pulls out the rate for specified pattern
+			Matcher m2 = rate.matcher(m.group());
+			while (m2.find()){
+					CNYrate = Float.parseFloat(m2.group());
+			}//second while
+		}//first while
+		
+		//Gets rate for South Korean Won (KRW)
+		Pattern krw = Pattern.compile("from=KRW&amp;to=USD'>\\d*\\.\\d*<");
+		m = krw.matcher(fullWebpage);
+		while (m.find()){
+			Pattern rate = Pattern.compile("\\d*\\.\\d*");//pulls out the rate for specified pattern
+			Matcher m2 = rate.matcher(m.group());
+			while (m2.find()){
+					KRWrate = Float.parseFloat(m2.group());
+			}//second while
+		}//first while
+		
+		//Gets rate for Indian Rupee (INR)
+		Pattern inr = Pattern.compile("from=INR&amp;to=USD'>\\d*\\.\\d*<");
+		m = inr.matcher(fullWebpage);
+		while (m.find()){
+			Pattern rate = Pattern.compile("\\d*\\.\\d*");//pulls out the rate for specified pattern
+			Matcher m2 = rate.matcher(m.group());
+			while (m2.find()){
+					INRrate = Float.parseFloat(m2.group());
+			}//second while
+		}//first while
+	}//getRates method
+	
+	public void Conversion(){
+		
+	}
+}//main class

@@ -13,8 +13,12 @@
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="false" key="wholeword"/>
-		<item value="shlMainScreen" key="selection"/>
+		<item value="JPY" key="selection"/>
 		<list key="findhistory">
+			<item value="JPY"/>
+			<item value="System"/>
+			<item value="System.out.println("/>
+			<item value="system.out.println("/>
 			<item value="shell\."/>
 			<item value=" shell"/>
 			<item value="shell"/>

@@ -15,8 +15,8 @@ INDEX VERSION 1.126+/Users/tetter36/Data/Java_Projects/GUI_Project_Money/.metada
 3993754962.index
 3321539481.index
 3712507179.index
-2357467682.index
 3302703152.index
+2357467682.index
 4234721849.index
 3491775583.index
 4238209716.index
